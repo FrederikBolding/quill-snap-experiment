@@ -1,8 +1,9 @@
 const { getPublicKey, utils } = require('noble-ed25519');
 const stringify = require('fast-json-stable-stringify');
 const WebsocketProvider = require('web3-providers-ws');
-const util = require('util');
+const { hexlify } = require('@ethersproject/bytes')
 
+// WebSockets are currently not exposed to snaps :(
 const ws = new WebsocketProvider('ws://localhost:8000');
 
 const nonce = 0;
