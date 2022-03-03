@@ -1,11 +1,13 @@
-const { getPublicKey, utils } = require('noble-ed25519');
+const { getPublicKey, utils, sign } = require('noble-ed25519');
 const stringify = require('fast-json-stable-stringify');
 const WebsocketProvider = require('web3-providers-ws');
-const { hexlify } = require('@ethersproject/bytes')
+const { hexlify } = require('@ethersproject/bytes');
 
-// WebSockets are currently not exposed to snaps :(
+const stripHexPrefix = (value) => value.replace('0x', '');
+
 const ws = new WebsocketProvider('ws://localhost:8000');
 
+// Store this somewhere
 const nonce = 0;
 
 const handleSend = async ({ payload, retryNonce }) => {
@@ -13,7 +15,7 @@ const handleSend = async ({ payload, retryNonce }) => {
   return new Promise(async (resolve, reject) => {
     const id = nonce;
     const privateKey = stripHexPrefix(hexlify(utils.randomPrivateKey()));
-    const publicKey = getPublicKey(privateKey);
+    const publicKey = await getPublicKey(privateKey);
     // Store this somewhere
     const keyPair = { publicKey, privateKey };
 
